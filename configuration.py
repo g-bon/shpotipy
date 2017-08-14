@@ -1,7 +1,12 @@
+from __future__ import (print_function, unicode_literals, division, absolute_import)
+from builtins import open
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 import pickle
 
 
-class Configuration:
+class Configuration(object):
     # To get credentials visit https://developer.spotify.com/my-applications/
     credentials_file = "credentials.pickle"
     client_id = None

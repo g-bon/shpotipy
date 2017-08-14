@@ -6,8 +6,9 @@ from setuptools.command.test import test as TestCommand
 
 
 REQUIRES = [
-    'docopt', 'termcolor',
+    'docopt', 'termcolor', 'pyperclip', 'requests', 'future'
 ]
+
 
 class PyTest(TestCommand):
     def finalize_options(self):
@@ -47,8 +48,8 @@ def read(fname):
 
 setup(
     name='shpotipy',
-    version="0.1.0",
-    description='A python based command line inteface for Spotify.',
+    version="0.2.0",
+    description='A python based command line interface for Spotify.',
     long_description=read("README.rst"),
     author='Gabriele Bonetti',
     author_email='gabriele.bonetti@gmail.com',

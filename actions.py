@@ -1,3 +1,8 @@
+from __future__ import (print_function, unicode_literals, division, absolute_import)
+from builtins import (input, int)
+from future import standard_library
+standard_library.install_aliases()
+
 import pyperclip
 from utils import *
 from osa import Osa
@@ -122,8 +127,8 @@ def toggle_repeat(args):
 
 def login_wizard(args):
     print("Please get your credentials from {}".format(SIGN_UP_URL))
-    Configuration.client_id = raw_input("Insert your client id: ")
-    Configuration.client_secret = raw_input("Insert your client secret: ")
+    Configuration.client_id = input("Insert your client id: ")
+    Configuration.client_secret = input("Insert your client secret: ")
     Configuration.store_credentials()
     authenticate()
     print("Credentials stored successfully, try playing something")

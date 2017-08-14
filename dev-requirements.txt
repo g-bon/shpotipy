@@ -1,5 +1,7 @@
 pytest
 invoke==0.14.0
 tox
+requests
+docopt
 termcolor
 pyperclip
