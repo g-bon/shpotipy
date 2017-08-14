@@ -46,21 +46,23 @@ def authenticate():
 
 
 def search(search_type, query):
-    try:
-        with open(TOKEN_FILE, 'rb') as f:
-            Configuration.auth_token = pickle.load(f)
+    if not Configuration.client_id or not Configuration.client_secret:
+        try:
+            with open(Configuration.credentials_file, 'rb') as f:
+                Configuration.client_id, Configuration.client_secret = pickle.load(f)
 
-    except IOError:
-        authenticate()
+        except IOError:
+            print_error("Credentials missing, to perform this operation "
+                        "set up your credentials calling shpotipy login")
+            raise DocoptExit
 
-    try:
-        with open(Configuration.credentials_file, 'rb') as f:
-            Configuration.client_id, Configuration.client_secret = pickle.load(f)
+    if not Configuration.auth_token:
+        try:
+            with open(TOKEN_FILE, 'rb') as f:
+                Configuration.auth_token = pickle.load(f)
 
-    except IOError:
-        print_error("Credentials missing, to perform this operation "
-                    "set up your credentials calling shpotipy login")
-        raise DocoptExit
+        except IOError:
+            authenticate()
 
     search_URL = SEARCH_BASE_URL.format(query, search_type)
     headers = {'Authorization': "Bearer {}".format(Configuration.auth_token)}

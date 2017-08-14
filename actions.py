@@ -14,7 +14,7 @@ def play(args):
         elif args['artist']:
             search_and_play(type='artist', query=args['<query>'])
         elif args['playlist']:
-            search_and_play(type='playlist', query=args['<query>'])  # da sistemare perche non prende playlist utente
+            search_and_play(type='playlist', query=args['<query>'])  # Todo: fix to only search for user playlist
         elif args['uri']:
             run_osa_script(Osa.playtrack.format(args['<query>']))
         else:
