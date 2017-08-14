@@ -2,3 +2,4 @@ pytest
 invoke==0.14.0
 tox
 termcolor
+pyperclip

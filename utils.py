@@ -6,7 +6,10 @@ from subprocess import Popen, PIPE
 from time import sleep
 from osa import Osa
 from configuration import Configuration
+from termcolor import colored
 
+
+TRACKS_URL = "http://open.spotify.com/track/"
 AUTH_URL = "https://accounts.spotify.com/api/token"
 AUTH_BODY = {'grant_type': 'client_credentials'}
 SEARCH_BASE_URL = "https://api.spotify.com/v1/search?q={}&type={}"
@@ -69,3 +72,20 @@ def search_and_play(type='track', query=None):
         run_osa_script(Osa.playtrack.format(songURI))
         return items[0]
     return None
+
+
+# Use brighter colors and bold
+def print_status(msg):
+    print(colored(msg, "green"))
+
+
+def print_message(msg):
+    print(colored(msg, "cyan"))
+
+
+def print_warning(msg):
+    print(colored(msg, "yellow"))
+
+
+def print_error(msg):
+    print(colored(msg, "red"))

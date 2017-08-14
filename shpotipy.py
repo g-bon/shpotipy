@@ -15,11 +15,9 @@ Usage:
     shpotipy quit
     shpotipy vol [show | up | down | set <amount>]
     shpotipy status
-    shpotipy share
-    shpotipy share url
-    shpotipy share uri
-    shpotipy toggle shuffle
-    shpotipy toggle repeat
+    shpotipy share (uri | url)
+    shpotipy shuffle
+    shpotipy repeat
 """
 
 import actions

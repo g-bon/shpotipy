@@ -1,11 +1,14 @@
+import pyperclip
 from docopt import DocoptExit
-from termcolor import colored
-from utils import search_and_play, run_osa_script
+from utils import *
 from osa import Osa
 
 
 def play(args):
-    # shpotipy play [(album | artist | list | uri) <query>]
+    """
+    Play current song if no additional parameters are given.
+    Search and play otherwise.
+    """
     if args['<query>']:
         if args['album']:
             search_and_play(type='album', query=args['<query>'])
@@ -22,14 +25,6 @@ def play(args):
         run_osa_script(Osa.play)
 
 
-def status(args=None):
-    print("Spotify is currently {}".format(run_osa_script(Osa.getstate)))
-    print("Artist: {}".format(run_osa_script(Osa.getartist)))
-    print("Album: {}".format(run_osa_script(Osa.getalbum)))
-    print("Track: {}".format(run_osa_script(Osa.gettrack)))
-    pos()
-
-
 def next_track(args):
     run_osa_script(Osa.playnexttrack)
 
@@ -40,10 +35,6 @@ def previous_track(args):
 
 def replay(args):
     run_osa_script(Osa.playfromstart)
-
-
-def pos(args=None):
-    print("Position: {} / {}".format(run_osa_script(Osa.getposition), run_osa_script(Osa.getduration)))
 
 
 def pause(args):
@@ -74,25 +65,57 @@ def vol(args):
         try:
             vol = int(args['<amount>'])
         except ValueError:
-            print(colored("Volume value must be a number between 0 and 100", "red"))
+            print_error("Volume value must be a number between 0 and 100")
             raise DocoptExit
         if 0 <= vol <= 100:
             run_osa_script(Osa.setvolume.format(args['<amount>']))
             print("Volume: {}".format(vol))
         else:
-            print(colored("Volume value must be a number between 0 and 100", "red"))
+            print_error("Volume value must be a number between 0 and 100")
             raise DocoptExit
 
 
+def status(args=None):
+    status_info = run_osa_script(Osa.getstate)
+    artist_info = run_osa_script(Osa.getartist)
+    album_info = run_osa_script(Osa.getalbum)
+    track_info = run_osa_script(Osa.gettrack)
+    curr_pos, total_time = _get_position()
+
+    print_status("Spotify is currently {}".format(status_info))
+    print("Artist: {}\nAlbum: {}\nTrack: {}\nPosition: {} / {}\n"
+          .format(artist_info, album_info, track_info, curr_pos, total_time))
+
+
+def _get_position():
+    return run_osa_script(Osa.getposition), run_osa_script(Osa.getduration)
+
+
+def pos(args=None):
+    print("Position: {} / {}".format(*_get_position()))
+
+
 def share(args):
-    pass
+    uri = run_osa_script(Osa.geturi)
+
+    if args['uri']:
+        pyperclip.copy(uri)
+
+    elif args['url']:
+        song_uri = uri.split(':')[2]
+        url = TRACKS_URL + song_uri
+        pyperclip.copy(url)
 
 
 def toggle_shuffle(args):
     run_osa_script(Osa.noshuffle)
-    run_osa_script(Osa.shuffle)
+    shuffle_enabled = run_osa_script(Osa.shuffle) == 'true'
+    shuffle_status = "enabled" if shuffle_enabled else "disabled"
+    print_status("Shuffle mode {}".format(shuffle_status))
 
 
 def toggle_repeat(args):
     run_osa_script(Osa.norepeat)
-    run_osa_script(Osa.repeat)
+    repeat_enabled = run_osa_script(Osa.repeat) == 'true'
+    repeat_status = "enabled" if repeat_enabled else "disabled"
+    print_status("Repeat mode {}".format(repeat_status))

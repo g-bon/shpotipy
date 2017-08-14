@@ -1,4 +1,10 @@
 class Osa:
+    """
+    Osascript commands to interact with spotify.
+
+    Commands that need parametrization are written with
+    curly bracket placeholder to be used with string.format
+    """
     getstate = 'tell application "Spotify" to player state as string'
     getartist = 'tell application "Spotify" to artist of current track as string'
     getalbum = 'tell application "Spotify" to album of current track as string'
@@ -16,6 +22,7 @@ class Osa:
     checkrunning = 'application "Spotify" is running'
     activate = 'tell application "Spotify" to activate'
     play = 'tell application "Spotify" to play'
+    geturi = 'tell application "Spotify" to spotify url of current track'
     state = 'tell application "Spotify" to player state as string'
     setvolume = 'tell application "Spotify" to set sound volume to {}'
     noshuffle = 'tell application "Spotify" to set shuffling to not shuffling'
