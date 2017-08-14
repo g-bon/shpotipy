@@ -6,7 +6,7 @@ The project is a python implementation of [Shpotify](https://github.com/hnarayan
 The projects was created to support token based authentication of Spotify's search API.
 
 To make search work please get your credentials from [https://developer.spotify.com/](https://developer.spotify.com/) and set
-your client id and client secret in configuration.py or calling shpotipy login and following instructions.
+your **client id** and **client secret** in configuration.py or calling shpotipy login and following instructions.
 
 ## Usage:
     shpotipy play [(album | artist | playlist | uri) <query>]
@@ -20,4 +20,5 @@ your client id and client secret in configuration.py or calling shpotipy login a
     shpotipy status
     shpotipy shuffle
     shpotipy repeat
+    shpotipy login
 

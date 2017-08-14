@@ -7,8 +7,10 @@ from time import sleep
 from osa import Osa
 from configuration import Configuration
 from termcolor import colored
+from docopt import DocoptExit
 
 
+SIGN_UP_URL = "https://developer.spotify.com/"
 TRACKS_URL = "http://open.spotify.com/track/"
 AUTH_URL = "https://accounts.spotify.com/api/token"
 AUTH_BODY = {'grant_type': 'client_credentials'}
@@ -50,6 +52,15 @@ def search(search_type, query):
 
     except IOError:
         authenticate()
+
+    try:
+        with open(Configuration.credentials_file, 'rb') as f:
+            Configuration.client_id, Configuration.client_secret = pickle.load(f)
+
+    except IOError:
+        print_error("Credentials missing, to perform this operation "
+                    "set up your credentials calling shpotipy login")
+        raise DocoptExit
 
     search_URL = SEARCH_BASE_URL.format(query, search_type)
     headers = {'Authorization': "Bearer {}".format(Configuration.auth_token)}

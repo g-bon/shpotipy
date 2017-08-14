@@ -18,6 +18,7 @@ Usage:
     shpotipy share (uri | url)
     shpotipy shuffle
     shpotipy repeat
+    shpotipy login
 """
 
 import actions
@@ -45,7 +46,8 @@ def main():
         'vol': actions.vol,
         'share': actions.share,
         'shuffle': actions.toggle_shuffle,
-        'repeat': actions.toggle_repeat
+        'repeat': actions.toggle_repeat,
+        'login': actions.login_wizard
     }
 
     arg = next(arg for arg in args if arg in commands_functions.keys() and args[arg] is True)

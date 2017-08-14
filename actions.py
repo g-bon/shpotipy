@@ -1,5 +1,4 @@
 import pyperclip
-from docopt import DocoptExit
 from utils import *
 from osa import Osa
 
@@ -119,3 +118,12 @@ def toggle_repeat(args):
     repeat_enabled = run_osa_script(Osa.repeat) == 'true'
     repeat_status = "enabled" if repeat_enabled else "disabled"
     print_status("Repeat mode {}".format(repeat_status))
+
+
+def login_wizard(args):
+    print("Please get your credentials from {}".format(SIGN_UP_URL))
+    Configuration.client_id = raw_input("Insert your client id: ")
+    Configuration.client_secret = raw_input("Insert your client secret: ")
+    Configuration.store_credentials()
+    authenticate()
+    print("Credentials stored successfully, try playing something")
