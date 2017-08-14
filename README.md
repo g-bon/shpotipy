@@ -18,6 +18,7 @@ your **client id** and **client secret** in configuration.py or calling shpotipy
     shpotipy quit
     shpotipy vol [show | up | down | set <amount>]
     shpotipy status
+    shpotipy share (uri | url)
     shpotipy shuffle
     shpotipy repeat
     shpotipy login
