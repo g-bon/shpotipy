@@ -56,27 +56,26 @@ def vol(args):
         print(run_osa_script(Osa.getvolume))
 
     elif args['up']:
-        vol = run_osa_script(Osa.getvolume)
-        run_osa_script(Osa.setvolume.format(int(vol) + vol_step))
-        print("Volume: {}".format(int(vol) + vol_step))
+        volume = run_osa_script(Osa.getvolume)
+        new_vol = min(int(volume) + vol_step, 100)
+        set_volume(new_vol)
+        print("Volume: {}".format(new_vol))
 
     elif args['down']:
-        vol = run_osa_script(Osa.getvolume)
-        run_osa_script(Osa.setvolume.format(int(vol) - vol_step))
-        print("Volume: {}".format(int(vol) - vol_step))
+        volume = run_osa_script(Osa.getvolume)
+        new_vol = max(int(volume) - vol_step, 0)
+        set_volume(new_vol)
+        print("Volume: {}".format(new_vol))
 
     elif args['set']:
         try:
-            vol = int(args['<amount>'])
+            volume = int(args['<amount>'])
         except ValueError:
             print_error("Volume value must be a number between 0 and 100")
             raise DocoptExit
-        if 0 <= vol <= 100:
-            run_osa_script(Osa.setvolume.format(args['<amount>']))
-            print("Volume: {}".format(vol))
-        else:
-            print_error("Volume value must be a number between 0 and 100")
-            raise DocoptExit
+
+        set_volume(volume)
+        print("Volume: {}".format(args['<amount>']))
 
 
 def status(args=None):
