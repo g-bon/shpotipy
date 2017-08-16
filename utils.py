@@ -92,6 +92,16 @@ def search_and_play(type='track', query=None):
     return None
 
 
+def set_volume(volume):
+    if 0 <= volume <= 100:
+        # Fix weird spotify behavior when setting volume
+        volume = volume if volume == 100 else volume + 1
+        run_osa_script(Osa.setvolume.format(str(volume)))
+    else:
+        print_error("Volume value must be a number between 0 and 100")
+        raise DocoptExit
+
+
 # Use brighter colors and bold
 def print_status(msg):
     print(colored(msg, "green"))
