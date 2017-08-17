@@ -2,23 +2,23 @@
 # -*- coding: utf-8 -*-
 
 """
-Shpotipy.
+spotipy.
 
 
 Usage:
-    shpotipy play [(album | artist | playlist | uri) <query>]
-    shpotipy next
-    shpotipy prev
-    shpotipy replay
-    shpotipy pos [<time>]
-    shpotipy pause
-    shpotipy quit
-    shpotipy vol [show | up | down | set <amount>]
-    shpotipy status
-    shpotipy share (uri | url)
-    shpotipy shuffle
-    shpotipy repeat
-    shpotipy login
+    spotipy play [(album | artist | playlist | uri) <query>]
+    spotipy next
+    spotipy prev
+    spotipy replay
+    spotipy pos [<time>]
+    spotipy pause
+    spotipy quit
+    spotipy vol [show | up | down | set <amount>]
+    spotipy status
+    spotipy share (uri | url)
+    spotipy shuffle
+    spotipy repeat
+    spotipy login
 """
 
 from __future__ import (print_function, unicode_literals, division, absolute_import)
@@ -27,7 +27,7 @@ from future import standard_library
 
 standard_library.install_aliases()
 
-from shpotipy import actions
+from spotipy import actions
 from builtins import next
 from docopt import docopt
 
@@ -37,7 +37,7 @@ __license__ = "MIT"
 
 
 def main():
-    """Main entry point for the shpotipy CLI."""
+    """Main entry point for the spotipy CLI."""
     args = docopt(__doc__)
     # print(args)
 

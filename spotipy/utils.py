@@ -9,8 +9,8 @@ from builtins import open
 from requests.auth import HTTPBasicAuth
 from subprocess import Popen, PIPE
 from time import sleep
-from shpotipy.osa import Osa
-from shpotipy.configuration import Configuration
+from spotipy.osa import Osa
+from spotipy.configuration import Configuration
 from termcolor import colored
 from docopt import DocoptExit
 
@@ -58,7 +58,7 @@ def search(search_type, query):
 
         except IOError:
             print_error("Credentials missing, to perform this operation "
-                        "set up your credentials calling shpotipy login")
+                        "set up your credentials calling spotipy login")
             raise DocoptExit
 
     if not Configuration.auth_token:

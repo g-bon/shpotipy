@@ -5,9 +5,9 @@ standard_library.install_aliases()
 import pyperclip
 from builtins import (input, int)
 from docopt import DocoptExit
-from shpotipy.configuration import Configuration
-from shpotipy.osa import Osa
-from shpotipy.utils import (run_osa_script, search_and_play, set_volume, print_error,
+from spotipy.configuration import Configuration
+from spotipy.osa import Osa
+from spotipy.utils import (run_osa_script, search_and_play, set_volume, print_error,
                             print_status, TRACKS_URL, authenticate, SIGN_UP_URL)
 
 

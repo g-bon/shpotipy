@@ -38,7 +38,7 @@ def find_version(fname):
         raise RuntimeError('Cannot find version information')
     return version
 
-__version__ = find_version("shpotipy/shpotipy.py")
+__version__ = find_version("spotipy/spotipy.py")
 
 
 def read(fname):
@@ -47,20 +47,20 @@ def read(fname):
     return content
 
 setup(
-    name='shpotipy',
+    name='spotipy',
     version="0.2.0",
     description='A python based command line interface for Spotify.',
     author='Gabriele Bonetti',
     author_email='gabriele.bonetti@gmail.com',
-    url='https://github.com/g-bon/shpotipy',
+    url='https://github.com/g-bon/spotipy',
     install_requires=REQUIRES,
     license='MIT',
     zip_safe=False,
-    keywords='shpotipy',
-    packages=['shpotipy'],
+    keywords='spotipy',
+    packages=['spotipy'],
     entry_points={
         'console_scripts': [
-            "shpotipy = shpotipy.shpotipy:main"
+            "spotipy = spotipy.spotipy:main"
         ]
     },
     tests_require=['pytest'],

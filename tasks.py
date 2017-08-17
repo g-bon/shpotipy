@@ -16,7 +16,7 @@ def test(ctx):
 def clean(ctx):
     run('rm -rf build')
     run('rm -rf dist')
-    run('rm -rf shpotipy.egg-info')
+    run('rm -rf spotipy.egg-info')
     clean_docs(ctx)
     print("Cleaned up.")
 
