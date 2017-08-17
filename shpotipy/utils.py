@@ -1,16 +1,16 @@
 from __future__ import (print_function, unicode_literals, division, absolute_import)
-from builtins import open
 from future import standard_library
 standard_library.install_aliases()
 
 import json
 import pickle
 import requests
+from builtins import open
 from requests.auth import HTTPBasicAuth
 from subprocess import Popen, PIPE
 from time import sleep
-from osa import Osa
-from configuration import Configuration
+from shpotipy.osa import Osa
+from shpotipy.configuration import Configuration
 from termcolor import colored
 from docopt import DocoptExit
 

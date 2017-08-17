@@ -1,8 +1,8 @@
 from __future__ import (print_function, unicode_literals, division, absolute_import)
-from builtins import open
 from future import standard_library
 standard_library.install_aliases()
-from builtins import object
+
+from builtins import open, object
 import pickle
 
 

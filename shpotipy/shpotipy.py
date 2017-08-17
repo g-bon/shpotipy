@@ -20,12 +20,15 @@ Usage:
     shpotipy repeat
     shpotipy login
 """
+
 from __future__ import (print_function, unicode_literals, division, absolute_import)
-from builtins import next
 from future import standard_library
+
+
 standard_library.install_aliases()
 
-import actions
+from shpotipy import actions
+from builtins import next
 from docopt import docopt
 
 __version__ = "0.1.0"

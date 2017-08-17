@@ -3,6 +3,7 @@ from future import standard_library
 standard_library.install_aliases()
 from builtins import object
 
+
 class Osa(object):
     """
     Osascript commands to interact with spotify.

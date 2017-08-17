@@ -1,11 +1,14 @@
 from __future__ import (print_function, unicode_literals, division, absolute_import)
-from builtins import (input, int)
 from future import standard_library
 standard_library.install_aliases()
 
 import pyperclip
-from utils import *
-from osa import Osa
+from builtins import (input, int)
+from docopt import DocoptExit
+from shpotipy.configuration import Configuration
+from shpotipy.osa import Osa
+from shpotipy.utils import (run_osa_script, search_and_play, set_volume, print_error,
+                            print_status, TRACKS_URL, authenticate, SIGN_UP_URL)
 
 
 def play(args):
@@ -53,7 +56,7 @@ def vol(args):
     vol_step = 10
 
     if args['show']:
-        print(run_osa_script(Osa.getvolume))
+        print("Volume: {}".format(run_osa_script(Osa.getvolume)))
 
     elif args['up']:
         volume = run_osa_script(Osa.getvolume)
