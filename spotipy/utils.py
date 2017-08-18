@@ -10,8 +10,8 @@ from builtins import open
 from requests.auth import HTTPBasicAuth
 from subprocess import Popen, PIPE
 from time import sleep
-from spotipy.osa import Osa
-from spotipy.configuration import Configuration
+from osa import Osa
+from configuration import Configuration
 from docopt import DocoptExit
 
 
@@ -45,17 +45,24 @@ def authenticate():
                              auth=HTTPBasicAuth(Configuration.client_id, Configuration.client_secret),
                              data=AUTH_BODY)
 
-    Configuration.auth_token = response.json().get("access_token", None)
-    with open(TOKEN_FILE, 'wb') as f:
-        pickle.dump(Configuration.auth_token, f)
+    if response.status_code == 200:
+        Configuration.auth_token = response.json().get("access_token", None)
+        with open(TOKEN_FILE, 'wb') as f:
+            pickle.dump(Configuration.auth_token, f)
+    else:
+        print_error("Authentication failed, double check client id and secret")
+        raise DocoptExit
+
+
+def _load_credentials():
+        with open(Configuration.credentials_file, 'rb') as f:
+            Configuration.client_id, Configuration.client_secret = pickle.load(f)
 
 
 def search(search_type, query):
     if not Configuration.client_id or not Configuration.client_secret:
         try:
-            with open(Configuration.credentials_file, 'rb') as f:
-                Configuration.client_id, Configuration.client_secret = pickle.load(f)
-
+            _load_credentials()
         except IOError:
             print_error("Credentials missing, to perform this operation "
                         "set up your credentials calling spotipy login")
@@ -75,7 +82,6 @@ def search(search_type, query):
 
     # if status code wrong re-authenticate
     if response.status_code == 200:
-        print(response.status_code)
         return response
     else:
         authenticate()
@@ -85,17 +91,35 @@ def search(search_type, query):
 def search_and_play(type='track', query=None):
     assert type is None or type in ['track', 'album', 'artist', 'playlist', 'uri']
     response = search(type, query)
-    response_json = json.loads(response.content)
-    if response.status_code in [200, 201, 204]:
+    response_json = json.loads(response.text)
+    if response.status_code in [200]:
         items = response_json[type + "s"]["items"]  # terrible hack
         if len(items) is not 0:
             songURI = items[0]['uri']
             run_osa_script(Osa.playtrack.format(songURI))
             return items[0]
     else:
-        print_error("Spotify search API answered with error: {}.\nPlease set you API credentials "
-                    "by calling spotipy login".format(response_json['error']['message']))
+        print_error("Spotify search API answered with error: {}.".format(response_json['error']['message']))
         raise DocoptExit
+        # print_status("Trying to authenticate...")
+
+        # try:
+        #     _load_credentials()
+        #     authenticate()
+        #     print_status("Success")
+        # except IOError:
+        #     print_error("Credentials missing, to perform this operation "
+        #                 "set up your credentials calling spotipy login")
+        #     raise DocoptExit
+
+        # response = search(type, query)
+        # response_json = json.loads(response.text)
+        # if response.status_code in [200, 201, 204]:
+        #     items = response_json[type + "s"]["items"]  # terrible hack
+        #     if len(items) is not 0:
+        #         songURI = items[0]['uri']
+        #         run_osa_script(Osa.playtrack.format(songURI))
+        #         return items[0]
 
 
 def set_volume(volume):
@@ -109,20 +133,23 @@ def set_volume(volume):
 
 
 # Use brighter colors and bold
-status_font = colored.fg(118) + colored.attr("bold")
+status_style = colored.fg(119) + colored.attr("bold")
+message_style = colored.fg("cyan") + colored.attr("bold")
+warning_style = colored.fg("yellow") + colored.attr("bold")
+error_style = colored.fg("red") + colored.attr("bold")
 
 
 def print_status(msg):
-    print(colored.stylize(msg, status_font))
+    print(colored.stylize(msg, status_style))
 
 
 def print_message(msg):
-    print(colored(msg, "cyan"))
+    print(colored.stylize(msg, message_style))
 
 
 def print_warning(msg):
-    print(colored(msg, "yellow"))
+    print(colored.stylize(msg, warning_style))
 
 
 def print_error(msg):
-    print(colored(msg, "red"))
+    print(colored.stylize(msg, error_style))

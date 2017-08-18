@@ -1,9 +1,9 @@
 import pyperclip
 from builtins import (input, int)
 from docopt import DocoptExit
-from spotipy.configuration import Configuration
-from spotipy.osa import Osa
-from spotipy.utils import (run_osa_script, search_and_play, set_volume, print_error,
+from configuration import Configuration
+from osa import Osa
+from utils import (run_osa_script, search_and_play, set_volume, print_error,
                             print_status, TRACKS_URL, authenticate, SIGN_UP_URL)
 
 
@@ -92,10 +92,6 @@ def status(args=None):
 
 def _get_position():
     return run_osa_script(Osa.getposition), run_osa_script(Osa.getduration)
-
-
-def pos(args=None):
-    print("Position: {} / {}".format(*_get_position()))
 
 
 def share(args):

@@ -10,7 +10,6 @@ Usage:
     spotipy next
     spotipy prev
     spotipy replay
-    spotipy pos [<time>]
     spotipy pause
     spotipy quit
     spotipy vol [show | up | down | set <amount>]
@@ -23,14 +22,11 @@ Usage:
 
 from __future__ import (print_function, unicode_literals, division, absolute_import)
 from future import standard_library
-
 standard_library.install_aliases()
-
-
 
 from builtins import next
 from docopt import docopt
-from spotipy import actions
+import actions
 
 __version__ = "0.4"
 __author__ = "Gabriele Bonetti"
@@ -48,7 +44,6 @@ def main():
         'next': actions.next_track,
         'prev': actions.previous_track,
         'replay': actions.replay,
-        'pos': actions.pos,
         'pause': actions.pause,
         'quit': actions.quit_spotify,
         'vol': actions.vol,
