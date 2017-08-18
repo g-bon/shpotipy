@@ -6,7 +6,7 @@ from setuptools.command.test import test as TestCommand
 
 
 REQUIRES = [
-    'docopt', 'termcolor', 'pyperclip', 'requests', 'future'
+    'docopt', 'colored', 'pyperclip', 'requests', 'future'
 ]
 
 
@@ -48,7 +48,7 @@ def read(fname):
 
 setup(
     name='spotipy',
-    version="0.2.0",
+    version="0.4",
     description='A python based command line interface for Spotify.',
     author='Gabriele Bonetti',
     author_email='gabriele.bonetti@gmail.com',

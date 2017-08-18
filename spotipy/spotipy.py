@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-spotipy.
+
 
 
 Usage:
@@ -24,14 +24,15 @@ Usage:
 from __future__ import (print_function, unicode_literals, division, absolute_import)
 from future import standard_library
 
-
 standard_library.install_aliases()
 
-from spotipy import actions
+
+
 from builtins import next
 from docopt import docopt
+from spotipy import actions
 
-__version__ = "0.1.0"
+__version__ = "0.4"
 __author__ = "Gabriele Bonetti"
 __license__ = "MIT"
 

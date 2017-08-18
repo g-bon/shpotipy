@@ -1,7 +1,3 @@
-from __future__ import (print_function, unicode_literals, division, absolute_import)
-from future import standard_library
-standard_library.install_aliases()
-
 import pyperclip
 from builtins import (input, int)
 from docopt import DocoptExit
@@ -45,6 +41,7 @@ def replay(args):
 
 
 def pause(args):
+    print_status("Pausing Spotify")
     run_osa_script(Osa.pause)
 
 

@@ -5,13 +5,13 @@ standard_library.install_aliases()
 import json
 import pickle
 import requests
+import colored
 from builtins import open
 from requests.auth import HTTPBasicAuth
 from subprocess import Popen, PIPE
 from time import sleep
 from spotipy.osa import Osa
 from spotipy.configuration import Configuration
-from termcolor import colored
 from docopt import DocoptExit
 
 
@@ -75,6 +75,7 @@ def search(search_type, query):
 
     # if status code wrong re-authenticate
     if response.status_code == 200:
+        print(response.status_code)
         return response
     else:
         authenticate()
@@ -84,12 +85,17 @@ def search(search_type, query):
 def search_and_play(type='track', query=None):
     assert type is None or type in ['track', 'album', 'artist', 'playlist', 'uri']
     response = search(type, query)
-    items = json.loads(response.content)[type + "s"]["items"]  # terrible hack
-    if len(items) is not 0:
-        songURI = items[0]['uri']
-        run_osa_script(Osa.playtrack.format(songURI))
-        return items[0]
-    return None
+    response_json = json.loads(response.content)
+    if response.status_code in [200, 201, 204]:
+        items = response_json[type + "s"]["items"]  # terrible hack
+        if len(items) is not 0:
+            songURI = items[0]['uri']
+            run_osa_script(Osa.playtrack.format(songURI))
+            return items[0]
+    else:
+        print_error("Spotify search API answered with error: {}.\nPlease set you API credentials "
+                    "by calling spotipy login".format(response_json['error']['message']))
+        raise DocoptExit
 
 
 def set_volume(volume):
@@ -103,8 +109,11 @@ def set_volume(volume):
 
 
 # Use brighter colors and bold
+status_font = colored.fg(118) + colored.attr("bold")
+
+
 def print_status(msg):
-    print(colored(msg, "green"))
+    print(colored.stylize(msg, status_font))
 
 
 def print_message(msg):
