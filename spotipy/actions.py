@@ -4,7 +4,7 @@ from docopt import DocoptExit
 from configuration import Configuration
 from osa import Osa
 from utils import (run_osa_script, search_and_play, set_volume, print_error,
-                            print_status, TRACKS_URL, authenticate, SIGN_UP_URL)
+                            print_status, TRACKS_URL, _authenticate, SIGN_UP_URL)
 
 
 def play(args):
@@ -14,30 +14,40 @@ def play(args):
     """
     if args['<query>']:
         if args['album']:
-            search_and_play(type='album', query=args['<query>'])
+            album = search_and_play(type='album', query=args['<query>'])
+            print_status("Playing album: {}".format(album))
         elif args['artist']:
-            search_and_play(type='artist', query=args['<query>'])
+            artist = search_and_play(type='artist', query=args['<query>'])
+            print_status("Playing artist: {}".format(artist))
         elif args['playlist']:
-            search_and_play(type='playlist', query=args['<query>'])  # Todo: fix to only search for user playlist
+            playlist = search_and_play(type='playlist', query=args['<query>'])  # Todo: fix to only search for user playlist
+            print_status("Playing playlist: {}".format(playlist))
         elif args['uri']:
             run_osa_script(Osa.playtrack.format(args['<query>']))
+            print_status("Playing uri: {}".format(args['uri']))
         else:
             search_and_play(type='track', query=args['<query>'])
 
     else:
         run_osa_script(Osa.play)
-
+        status()
 
 def next_track(args):
+    print_status("Playing next track")
     run_osa_script(Osa.playnexttrack)
+    status()
 
 
 def previous_track(args):
+    print_status("Playing previous track")
     run_osa_script(Osa.playprevioustrack)
+    status()
 
 
 def replay(args):
+    print_status("Playing track from the beginning")
     run_osa_script(Osa.playfromstart)
+    status()
 
 
 def pause(args):
@@ -46,6 +56,7 @@ def pause(args):
 
 
 def quit_spotify(args):
+    print_status("Quitting Spotify")
     run_osa_script(Osa.quit)
 
 
@@ -53,19 +64,19 @@ def vol(args):
     vol_step = 10
 
     if args['show']:
-        print("Volume: {}".format(run_osa_script(Osa.getvolume)))
+        print_status("Volume: {}".format(run_osa_script(Osa.getvolume)))
 
     elif args['up']:
         volume = run_osa_script(Osa.getvolume)
         new_vol = min(int(volume) + vol_step, 100)
         set_volume(new_vol)
-        print("Volume: {}".format(new_vol))
+        print_status("Volume: {}".format(new_vol))
 
     elif args['down']:
         volume = run_osa_script(Osa.getvolume)
         new_vol = max(int(volume) - vol_step, 0)
         set_volume(new_vol)
-        print("Volume: {}".format(new_vol))
+        print_status("Volume: {}".format(new_vol))
 
     elif args['set']:
         try:
@@ -75,7 +86,7 @@ def vol(args):
             raise DocoptExit
 
         set_volume(volume)
-        print("Volume: {}".format(args['<amount>']))
+        print_status("Volume: {}".format(args['<amount>']))
 
 
 def status(args=None):
@@ -99,11 +110,13 @@ def share(args):
 
     if args['uri']:
         pyperclip.copy(uri)
+        print_status("Song URI: {} copied to clipboard".format(uri))
 
     elif args['url']:
         song_uri = uri.split(':')[2]
         url = TRACKS_URL + song_uri
         pyperclip.copy(url)
+        print_status("Song URL: {} copied to clipboard".format(url))
 
 
 def toggle_shuffle(args):
@@ -121,9 +134,9 @@ def toggle_repeat(args):
 
 
 def login_wizard(args):
-    print("Please get your credentials from {}".format(SIGN_UP_URL))
+    print_status("Please get your credentials from {}".format(SIGN_UP_URL))
     Configuration.client_id = input("Insert your client id: ")
     Configuration.client_secret = input("Insert your client secret: ")
     Configuration.store_credentials()
-    authenticate()
-    print("Credentials stored successfully, try playing something")
+    _authenticate()
+    print_status("Credentials stored successfully, try playing something")
