@@ -3,10 +3,8 @@ from future import standard_library
 standard_library.install_aliases()
 
 import json
-import pickle
 import requests
 import colored
-from builtins import open
 from requests.auth import HTTPBasicAuth
 from subprocess import Popen, PIPE
 from time import sleep
@@ -40,41 +38,38 @@ def run_osa_script(script):
     return stdout.strip()
 
 
-def authenticate():
+def _authenticate():
     response = requests.post(AUTH_URL,
                              auth=HTTPBasicAuth(Configuration.client_id, Configuration.client_secret),
                              data=AUTH_BODY)
 
     if response.status_code == 200:
         Configuration.auth_token = response.json().get("access_token", None)
-        with open(TOKEN_FILE, 'wb') as f:
-            pickle.dump(Configuration.auth_token, f)
+        print_status("Success.")
+        Configuration.store_token()
     else:
-        print_error("Authentication failed, double check client id and secret")
+        print_error("Authentication failed, try to re-insert id and secret with \"spotipy login\"")
         raise DocoptExit
 
 
-def _load_credentials():
-        with open(Configuration.credentials_file, 'rb') as f:
-            Configuration.client_id, Configuration.client_secret = pickle.load(f)
+def _authenticate_with_credentials():
+    if not Configuration.client_id or not Configuration.client_secret:
+        try:
+            print_error("No stored token, trying to obtain a new one...")
+            Configuration.load_credentials()
+            _authenticate()
+        except IOError:
+            print_error("Credentials missing, to perform this operation "
+                        "set up your credentials calling \"spotipy login\"")
+            raise DocoptExit
 
 
 def search(search_type, query):
-    if not Configuration.client_id or not Configuration.client_secret:
+    if not Configuration.auth_token:  # always True in normal use, handy for dev
         try:
-            _load_credentials()
+            Configuration.load_token()
         except IOError:
-            print_error("Credentials missing, to perform this operation "
-                        "set up your credentials calling spotipy login")
-            raise DocoptExit
-
-    if not Configuration.auth_token:
-        try:
-            with open(TOKEN_FILE, 'rb') as f:
-                Configuration.auth_token = pickle.load(f)
-
-        except IOError:
-            authenticate()
+            _authenticate_with_credentials()
 
     search_URL = SEARCH_BASE_URL.format(query, search_type)
     headers = {'Authorization': "Bearer {}".format(Configuration.auth_token)}
@@ -84,12 +79,17 @@ def search(search_type, query):
     if response.status_code == 200:
         return response
     else:
-        authenticate()
-        return requests.get(search_URL, headers=headers)
+        _authenticate_with_credentials()
+        response = requests.get(search_URL, headers=headers)
+        if response.status_code == 200:
+            return response
+        else:
+            print_error("Authentication failed, try to re-insert id and secret with \"spotipy login\"")
+            raise DocoptExit
 
 
 def search_and_play(type='track', query=None):
-    assert type is None or type in ['track', 'album', 'artist', 'playlist', 'uri']
+    assert type is None or type in ['track', 'album', 'artist', 'playlist']
     response = search(type, query)
     response_json = json.loads(response.text)
     if response.status_code in [200]:
@@ -97,29 +97,10 @@ def search_and_play(type='track', query=None):
         if len(items) is not 0:
             songURI = items[0]['uri']
             run_osa_script(Osa.playtrack.format(songURI))
-            return items[0]
+            return items[0]['name']
     else:
         print_error("Spotify search API answered with error: {}.".format(response_json['error']['message']))
         raise DocoptExit
-        # print_status("Trying to authenticate...")
-
-        # try:
-        #     _load_credentials()
-        #     authenticate()
-        #     print_status("Success")
-        # except IOError:
-        #     print_error("Credentials missing, to perform this operation "
-        #                 "set up your credentials calling spotipy login")
-        #     raise DocoptExit
-
-        # response = search(type, query)
-        # response_json = json.loads(response.text)
-        # if response.status_code in [200, 201, 204]:
-        #     items = response_json[type + "s"]["items"]  # terrible hack
-        #     if len(items) is not 0:
-        #         songURI = items[0]['uri']
-        #         run_osa_script(Osa.playtrack.format(songURI))
-        #         return items[0]
 
 
 def set_volume(volume):
@@ -132,7 +113,6 @@ def set_volume(volume):
         raise DocoptExit
 
 
-# Use brighter colors and bold
 status_style = colored.fg(119) + colored.attr("bold")
 message_style = colored.fg("cyan") + colored.attr("bold")
 warning_style = colored.fg("yellow") + colored.attr("bold")
