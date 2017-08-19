@@ -12,7 +12,7 @@ Usage:
     spotipy replay
     spotipy pause
     spotipy quit
-    spotipy vol [show | up | down | set <amount>]
+    spotipy vol (show | up | down | set <amount>)
     spotipy status
     spotipy share (uri | url)
     spotipy shuffle
