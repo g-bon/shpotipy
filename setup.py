@@ -18,7 +18,7 @@ class PyTest(TestCommand):
         sys.exit(errcode)
 
 REQUIRES = [
-    'docopt', 'colored', 'pyperclip', 'requests', 'future'
+    'docopt', 'colored', 'pyperclip', 'requests'
 ]
 
 setup(
