@@ -5,3 +5,4 @@ requests
 docopt
 termcolor
 pyperclip
+future

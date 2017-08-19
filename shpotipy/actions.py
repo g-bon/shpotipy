@@ -1,9 +1,8 @@
 import pyperclip
-from builtins import (input, int)
 from docopt import DocoptExit
-from configuration import Configuration
-from osa import Osa
-from utils import (run_osa_script, search_and_play, set_volume, print_error,
+from shpotipy.configuration import Configuration
+from shpotipy.osa import Osa
+from shpotipy.utils import (run_osa_script, search_and_play, set_volume, print_error,
                             print_status, TRACKS_URL, _authenticate, SIGN_UP_URL)
 
 

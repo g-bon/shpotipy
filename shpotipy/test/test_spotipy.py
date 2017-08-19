@@ -1,20 +1,28 @@
 # -*- coding: utf-8 -*-
-from __future__ import (print_function, unicode_literals, division, absolute_import)
-from future import standard_library
-
-
-standard_library.install_aliases()
-
 import pytest
-from spotipy.osa import Osa
-from spotipy.utils import run_osa_script, set_volume
+
+from shpotipy.configuration import Configuration
+from shpotipy.osa import Osa
+from shpotipy.utils import run_osa_script, set_volume, _authenticate
 from subprocess import check_output, CalledProcessError, STDOUT
+
+# To run the tests that require authentication set
+# Your client id and secret in Configuration
 
 
 def _run_cmd(cmd):
     """Run a shell command `cmd` and return its output."""
     output = check_output(cmd, shell=True, stderr=STDOUT).decode('utf-8')
     return output
+
+
+@pytest.mark.skipif(not Configuration.client_id
+                    or not Configuration.client_secret,
+                    reason="Credentials needed to run this test")
+class TestLogin(object):
+    def test_login(self):
+        Configuration.store_credentials()
+        _authenticate()
 
 
 class TestVolume(object):
@@ -51,6 +59,9 @@ class TestPlaybackControls(object):
         assert "playing" in result
 
 
+@pytest.mark.skipif(not Configuration.client_id
+                    or not Configuration.client_secret,
+                    reason="Credentials needed to run this test")
 class TestSearchPlay(object):
     def test_search_and_play_artist(self):
         artist_search = "passenger"
