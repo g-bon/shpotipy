@@ -9,7 +9,7 @@ from shpotipy.configuration import Configuration
 from docopt import DocoptExit
 
 
-SIGN_UP_URL = "https://developer.spotify.com/"
+SIGN_UP_URL = "https://developer.spotify.com/dashboard/login"
 TRACKS_URL = "http://open.spotify.com/track/"
 AUTH_URL = "https://accounts.spotify.com/api/token"
 AUTH_BODY = {"grant_type": "client_credentials"}
@@ -56,7 +56,7 @@ def _authenticate_with_credentials():
             _authenticate()
         except IOError:
             print_error(
-                "Credentials missing, to perform this operation " 'set up your credentials calling "spotipy login"'
+                "Credentials missing, to perform this operation set up your credentials calling 'spotipy login'"
             )
             raise DocoptExit
 
