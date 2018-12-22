@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import pytest
 
 from shpotipy.configuration import Configuration
@@ -12,13 +11,13 @@ from subprocess import check_output, CalledProcessError, STDOUT
 
 def _run_cmd(cmd):
     """Run a shell command `cmd` and return its output."""
-    output = check_output(cmd, shell=True, stderr=STDOUT).decode('utf-8')
+    output = check_output(cmd, shell=True, stderr=STDOUT).decode("utf-8")
     return output
 
 
-@pytest.mark.skipif(not Configuration.client_id
-                    or not Configuration.client_secret,
-                    reason="Credentials needed to run this test")
+@pytest.mark.skipif(
+    not Configuration.client_id or not Configuration.client_secret, reason="Credentials needed to run this test"
+)
 class TestLogin(object):
     def test_login(self):
         Configuration.store_credentials()
@@ -53,33 +52,34 @@ class TestVolume(object):
 
 class TestPlaybackControls(object):
     """Test playback controls play, pause, next, prev, replay, pos"""
+
     def test_play(self):
         _run_cmd("spotipy play")
         result = run_osa_script(Osa.getstate)
         assert "playing" in result
 
 
-@pytest.mark.skipif(not Configuration.client_id
-                    or not Configuration.client_secret,
-                    reason="Credentials needed to run this test")
+@pytest.mark.skipif(
+    not Configuration.client_id or not Configuration.client_secret, reason="Credentials needed to run this test"
+)
 class TestSearchPlay(object):
     def test_search_and_play_artist(self):
         artist_search = "passenger"
-        _run_cmd("spotipy play artist {}".format(artist_search))
+        _run_cmd(f"spotipy play artist {artist_search}")
         result = _run_cmd("spotipy status").lower()
         assert "playing" in result
         assert artist_search in result
 
     def test_search_and_play_album(self):
         album_search = "vagabond"
-        _run_cmd("spotipy play album {}".format(album_search))
+        _run_cmd(f"spotipy play album {album_search}")
         result = _run_cmd("spotipy status").lower()
         assert "playing" in result
         assert album_search in result
 
     def test_search_and_play_track(self):
         track_search = "scare away the dark"
-        _run_cmd('spotipy play "{}"'.format(track_search))
+        _run_cmd(f'spotipy play "{track_search}"')
         result = _run_cmd("spotipy status").lower()
         assert "playing" in result
         assert track_search in result
