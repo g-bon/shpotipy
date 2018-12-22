@@ -41,6 +41,7 @@ def play(args):
         run_osa_script(Osa.play)
         status()
 
+
 def next_track(args):
     print_status("Playing next track")
     run_osa_script(Osa.playnexttrack)
@@ -106,10 +107,12 @@ def status(args=None):
     curr_pos, total_time = _get_position()
 
     print_status(f"Spotify is currently {status_info}")
-    print(f"Artist: {artist_info}\n"
-          f"Album: {album_info}\n"
-          f"Track: {track_info}\n"
-          f"Position: {curr_pos} / {total_time}\n")
+    print(
+        f"Artist: {artist_info}\n"
+        f"Album: {album_info}\n"
+        f"Track: {track_info}\n"
+        f"Position: {curr_pos} / {total_time}\n"
+    )
 
 
 def _get_position():
