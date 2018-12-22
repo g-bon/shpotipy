@@ -1,7 +1,6 @@
 import sys
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
-from shpotipy.shpotipy import __version__
 
 
 class PyTest(TestCommand):
@@ -19,7 +18,7 @@ class PyTest(TestCommand):
 
 setup(
     name="shpotipy",
-    version=__version__,
+    version=0.6,
     description="A python based command line interface for Spotify.",
     author="Gabriele Bonetti",
     author_email="gabriele.bonetti@gmail.com",
@@ -29,7 +28,7 @@ setup(
     zip_safe=False,
     keywords="shpotipy",
     packages=["shpotipy"],
-    entry_points={"console_scripts": ["spotipy = shpotipy.shpotipy:main"]},
+    entry_points={"console_scripts": ["shpotipy = shpotipy.shpotipy:main"]},
     tests_require=["pytest"],
     cmdclass={"test": PyTest},
 )

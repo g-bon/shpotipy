@@ -16,10 +16,6 @@ Usage:
 from docopt import docopt
 from shpotipy import actions
 
-__version__ = "0.4"
-__author__ = "Gabriele Bonetti"
-__license__ = "MIT"
-
 
 def main():
     """Main entry point for the spotipy CLI."""
