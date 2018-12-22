@@ -41,31 +41,30 @@ def play(args):
         run_osa_script(Osa.play)
         status()
 
-
-def next_track():
+def next_track(args):
     print_status("Playing next track")
     run_osa_script(Osa.playnexttrack)
     status()
 
 
-def previous_track():
+def previous_track(args):
     print_status("Playing previous track")
     run_osa_script(Osa.playprevioustrack)
     status()
 
 
-def replay():
+def replay(args):
     print_status("Playing track from the beginning")
     run_osa_script(Osa.playfromstart)
     status()
 
 
-def pause():
+def pause(args):
     print_status("Pausing Spotify")
     run_osa_script(Osa.pause)
 
 
-def quit_spotify():
+def quit_spotify(args):
     print_status("Quitting Spotify")
     run_osa_script(Osa.quit)
 
@@ -99,7 +98,7 @@ def vol(args):
         print_status(f'Volume: {args["<amount>"]}')
 
 
-def status():
+def status(args=None):
     status_info = run_osa_script(Osa.getstate)
     artist_info = run_osa_script(Osa.getartist)
     album_info = run_osa_script(Osa.getalbum)
@@ -131,21 +130,21 @@ def share(args):
         print_status(f"Song URL: {url} copied to clipboard")
 
 
-def toggle_shuffle():
+def toggle_shuffle(args):
     run_osa_script(Osa.noshuffle)
     shuffle_enabled = run_osa_script(Osa.shuffle) == "true"
     shuffle_status = "enabled" if shuffle_enabled else "disabled"
     print_status(f"Shuffle mode {shuffle_status}")
 
 
-def toggle_repeat():
+def toggle_repeat(args):
     run_osa_script(Osa.norepeat)
     repeat_enabled = run_osa_script(Osa.repeat) == "true"
     repeat_status = "enabled" if repeat_enabled else "disabled"
     print_status(f"Repeat mode {repeat_status}")
 
 
-def login_wizard():
+def login_wizard(args):
     print_status(f"Please get your credentials from {SIGN_UP_URL}")
     Configuration.client_id = input("Insert your client id: ")
     Configuration.client_secret = input("Insert your client secret: ")
